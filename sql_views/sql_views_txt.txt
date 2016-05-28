@@ -1,0 +1,348 @@
+//Vistas espaciales Gcmon
+//Jose I. Alvarez y Juanma Camarillo
+_________________________________
+pre_mensual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.geom,
+    b.mes,
+    b.agno,
+    b.p_mes
+   FROM id_coordenadas a
+ JOIN cru_pre b ON a.id_punto = b.id_punto;
+_________________________________
+temp_mensual_espacial
+_________________________________
+CREATE OR REPLACE VIEW temp_mensual_espacial AS 
+ SELECT a.id_punto,
+    a.geom,
+    b.mes,
+    b.agno,
+    b.temp_mes
+   FROM id_coordenadas a
+JOIN cru_temp b ON a.id_punto = b.id_punto
+_________________________________
+temp_min_mensual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.geom,
+    b.mes,
+    b.agno,
+    b.temp_min
+   FROM id_coordenadas a
+JOIN cru_temp_min b ON a.id_punto = b.id_punto;
+_________________________________
+temp_max_mensual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.geom,
+    b.mes,
+    b.agno,
+    b.temp_max
+   FROM id_coordenadas a
+JOIN cru_temp_max b ON a.id_punto = b.id_punto;
+_________________________________
+etp_mensual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.geom,
+    b.mes,
+    b.agno,
+    b.etp_mes
+   FROM id_coordenadas a
+JOIN etp_mensual b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_pre_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    a.mes,
+    a.anomalia,
+    b.geom
+   FROM anomalias_pre a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_pre_porcentaje_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    a.mes,
+    trunc(a.anomalia_porcentaje::numeric, 2) AS anomalia_porcentaje,
+    b.geom
+   FROM anomalias_pre_porcentaje a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_temp_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    a.mes,
+    a.anomalia_temp,
+    b.geom
+   FROM anomalias_temp a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_temp_min_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    a.mes,
+    a.anomalia_temp_min,
+    b.geom
+   FROM anomalias_temp_min a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_temp_max_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    a.mes,
+    a.anomalia_temp_max,
+    b.geom
+   FROM anomalias_temp_max a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_etp_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    a.mes,
+    a.anomalia_etp * 30::numeric AS anomalia_etp,
+    b.geom
+   FROM anomalias_etp a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_etp_porcentaje_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    a.mes,
+    a.anomalia_etp_porcentaje,
+    b.geom
+   FROM anomalias_etp_porcentaje a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+pre_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.pre_anual, 2) AS pre_anual,
+    b.geom
+   FROM pre_anual a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+temp_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.temp_anual, 2) AS temp_anual,
+    b.geom
+   FROM temp_anual a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+temp_min_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.temp_min_anual, 2) AS temp_min_anual,
+    b.geom
+   FROM temp_min_anual a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+temp_max_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.temp_max_anual, 2) AS temp_max_anual,
+    b.geom
+   FROM temp_max_anual a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+etp_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.etp_anual * 30::numeric, 2) AS etp_anual,
+    b.geom
+   FROM etp_anual a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+seasonality_index_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.seasonality_index::numeric, 2) AS seasonality_index,
+    b.geom
+   FROM seasonality_index a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_pre_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.pre_anual - b.pre_anual_normal, 2) AS anomalia_pre_anual,
+    a.geom
+   FROM pre_anual_espacial a
+JOIN cru_pre_anual_normal b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_temp_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.temp_anual - b.temp_anual_normal, 2) AS anomalia_temp_anual,
+    a.geom
+   FROM temp_anual_espacial a
+JOIN cru_temp_anual_normal b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_temp_min_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.temp_min_anual - b.temp_min_normal, 2) AS anomalia_temp_min_anual,
+    a.geom
+   FROM temp_min_anual_espacial a
+JOIN cru_temp_min_anual_normal b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_temp_max_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.temp_max_anual - b.temp_max_normal, 2) AS anomalia_temp_max_anual,
+    a.geom
+   FROM temp_max_anual_espacial a
+JOIN cru_temp_max_anual_normal b ON a.id_punto = b.id_punto;
+_________________________________
+anomalias_etp_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.agno,
+    trunc(a.etp_anual - b.etp_normal * 365::numeric, 2) AS anomalia_etp_anual,
+    a.geom
+   FROM etp_anual_espacial a
+JOIN cru_etp_anual_normal b ON a.id_punto = b.id_punto;
+_________________________________
+pre_normales_espacial
+_________________________________
+SELECT a.id_punto,
+    a.mes,
+        CASE
+            WHEN a.mes = 13 THEN 'autum'::text
+            WHEN a.mes = 14 THEN 'winter'::text
+            WHEN a.mes = 15 THEN 'spring'::text
+            WHEN a.mes = 16 THEN 'summer'::text
+            ELSE a.mes::text
+        END AS mes_etiqueta,
+    a.n_period,
+    a.period,
+    trunc(a.pre_normal, 2) AS pre_normal,
+    b.geom
+   FROM cru_pre_normales a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+temp_normales_espacial
+_________________________________
+SELECT a.id_punto,
+    a.mes,
+        CASE
+            WHEN a.mes = 13 THEN 'autum'::text
+            WHEN a.mes = 14 THEN 'winter'::text
+            WHEN a.mes = 15 THEN 'spring'::text
+            WHEN a.mes = 16 THEN 'summer'::text
+            ELSE a.mes::text
+        END AS mes_etiqueta,
+    a.n_period,
+    a.period,
+    trunc(a.temp_normal, 2) AS temp_normal,
+    b.geom
+   FROM cru_temp_normales a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+temp_min_normales_espacial
+_________________________________
+SELECT a.id_punto,
+    a.mes,
+        CASE
+            WHEN a.mes = 13 THEN 'autum'::text
+            WHEN a.mes = 14 THEN 'winter'::text
+            WHEN a.mes = 15 THEN 'spring'::text
+            WHEN a.mes = 16 THEN 'summer'::text
+            ELSE a.mes::text
+        END AS mes_etiqueta,
+    a.n_period,
+    a.period,
+    trunc(a.temp_min_normal, 2) AS temp_min_normal,
+    b.geom
+   FROM cru_temp_min_normales a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+temp_max_normales_espacial
+_________________________________
+SELECT a.id_punto,
+    a.mes,
+        CASE
+            WHEN a.mes = 13 THEN 'autum'::text
+            WHEN a.mes = 14 THEN 'winter'::text
+            WHEN a.mes = 15 THEN 'spring'::text
+            WHEN a.mes = 16 THEN 'summer'::text
+            ELSE a.mes::text
+        END AS mes_etiqueta,
+    a.n_period,
+    a.period,
+    trunc(a.temp_max_normal, 2) AS temp_max_normal,
+    b.geom
+   FROM cru_temp_max_normales a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+etp_normales_espacial
+_________________________________
+SELECT a.id_punto,
+    a.mes,
+        CASE
+            WHEN a.mes = 13 THEN 'autum'::text
+            WHEN a.mes = 14 THEN 'winter'::text
+            WHEN a.mes = 15 THEN 'spring'::text
+            WHEN a.mes = 16 THEN 'summer'::text
+            ELSE a.mes::text
+        END AS mes_etiqueta,
+    a.n_period,
+    a.period,
+    trunc(a.etp_normal * 30::numeric, 2) AS etp_normal,
+    b.geom
+   FROM cru_etp_normales a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+trends_anual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.cod_variable,
+    a.period,
+        CASE
+            WHEN a.period = 1 THEN '1901-2012'::text
+            WHEN a.period = 2 THEN '1901-1950'::text
+            WHEN a.period = 3 THEN '1951-2012'::text
+            ELSE NULL::text
+        END AS period_n,
+    trunc(a.trend_anual, 2) AS trend_anual,
+    b.geom
+   FROM trends_anual a
+JOIN id_coordenadas b ON a.id_punto = b.id_punto;
+_________________________________
+stn_pre_mensual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.geom,
+    b.mes,
+    b.agno,
+    b.stn_pre
+   FROM id_coordenadas a
+JOIN stn_cru_pre b ON a.id_punto = b.id_punto;
+_________________________________
+stn_temp_mensual_espacial
+_________________________________
+SELECT a.id_punto,
+    a.geom,
+    b.mes,
+    b.agno,
+    b.stn_temp
+   FROM id_coordenadas a
+JOIN stn_cru_temp b ON a.id_punto = b.id_punto;

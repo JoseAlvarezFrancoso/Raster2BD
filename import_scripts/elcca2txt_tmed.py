@@ -1,4 +1,4 @@
-#Script para la conversion de multiples archivos GeoTIFF de precipitación de los ELCCA en unico archivo de texto delimitado por espacios
+#Script para la conversion de multiples archivos GeoTIFF de temperatura media de los ELCCA en unico archivo de texto delimitado por espacios
 #Hecho por Jose I. Alvarez
 from __future__ import division
 import sys
@@ -10,7 +10,7 @@ def restart_line():
  sys.stdout.write('\r')
  sys.stdout.flush()
  # Funcion principal
-def elcca2txt_pre(ruta_input,archivo_salida):
+def elcca2txt_tmed(ruta_input,archivo_salida):
  print 'Iniciado a las: ' + datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S') 
  archivo_salida2 = open(archivo_salida, 'a')
  for id_modelo in range(1,5):
@@ -49,8 +49,8 @@ def elcca2txt_pre(ruta_input,archivo_salida):
      print "Error en el bucle periodo"
      raise SystemExit
     for mes in range (1,13):
-     mes_name = "prc" + per_name2 + '_' + str(mes)
-     archivo = ruta_input + "/ELCC4_vr_pluv/InfGeografica/InfRaster/TIFF" + "/" + modelo_name + "/" + esc_name + "/" + per_name + "/" + mes_name + ".tif"
+     mes_name = "tmed" + per_name2 + '_' + str(mes)
+     archivo = ruta_input + "/ELCC4_vr_term/InfGeografica/InfRaster/TIFF" + "/" + modelo_name + "/" + esc_name + "/" + per_name + "/" + mes_name + ".tif"
   #  archivo = archivo.encode('utf-8')
      dataset = gdal.Open( archivo, GA_ReadOnly )
      band = dataset.GetRasterBand(1)
@@ -82,5 +82,5 @@ if __name__ == '__main__':
   raise SystemExit
  ruta_input = sys.argv[1] 
  archivo_salida = sys.argv[2]
- elcca2txt_pre(ruta_input,archivo_salida)
+ elcca2txt_tmed(ruta_input,archivo_salida)
  raise SystemExit

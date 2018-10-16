@@ -1,4 +1,4 @@
-#Script para la importacion de datos netCDF de un mes de la GHCN-CAMS en PostGIS.
+#Script para la importacion de datos netCDF de un mes del GPCC en PostGIS.
 #Autor: José I. Álvarez Francoso
 import sys
 from osgeo import gdal, ogr, osr

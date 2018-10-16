@@ -1,9 +1,14 @@
-#Script para la importacion de datos netCDF de un mes de la GPCC en PostGIS.
-#Hecho por Jose I. Alvarez
+#Script para la importacion de datos netCDF de un mes de la GHCN-CAMS en PostGIS.
+#Autor: José I. Álvarez Francoso
 import sys
 from osgeo import gdal, ogr, osr
 from osgeo.gdalconst import GA_ReadOnly, GA_Update
-def gpcc2gcmon(pg_connection_string, mes, agno, input_file):
+ # Funcion para sobreescribir el mensaje de porcentaje completado 
+def restart_line():
+ sys.stdout.write('\r')
+ sys.stdout.flush()
+ # Funcion principal
+def gpcc2gcm_win(pg_connection_string, mes, agno):
  # Registra drivers gdal
  gdal.AllRegister()
  # Driver de postgis, para poder crear la tabla
@@ -12,7 +17,8 @@ def gpcc2gcmon(pg_connection_string, mes, agno, input_file):
  srs = osr.SpatialReference()
  srs.ImportFromEPSG(4326)
  # Leemos la ultima banda del dataset (ultimo mes)
- dataset = gdal.Open( input_file, GA_ReadOnly )
+ fuente = "C:/Cualquier_directorio" + mes + "_" + agno + "/first_guess_monthly_" + agno + "_" + mes + ".nc"
+ dataset = gdal.Open( fuente, GA_ReadOnly )
  subdatasets = dataset.GetSubDatasets()
  subdataset_p = subdatasets[0][0]
  sds = gdal.Open(subdataset_p, gdal.GA_ReadOnly)
@@ -70,20 +76,21 @@ def gpcc2gcmon(pg_connection_string, mes, agno, input_file):
    feature.SetField('agno', agno)
    id_n+=1
    porcent = id_n * 100/ 64800
-   print 'Porcentaje completado: %s' % (porcent)
+   sys.stdout.write('porcentaje completado: ' + str(porcent))
+   sys.stdout.flush()
+   restart_line()
 #   print 'Guardando el valor: %s para la variable %s en el punto x: %s, y: %s' % (value, 'temp', x, y)
    # Definimos la geometria de la capa y finalizamos su creacion
    feature.SetGeometry(point)
    pg_layer.CreateFeature(feature)
 
 if __name__ == '__main__':
-    # El usuario tiene que definir la cadena de conexion Postgis GDAL, el mes, el agno y la ruta y nombre de archivo netCDF de entrada
-    if len(sys.argv) < 5 or len(sys.argv) > 5:
-        print "uso: <GDAL PostGIS connection string> <mes> <agno> <input_file>"
+    # El usuario tiene que definir al menos un parametro: la cadena de conexion Postgis GDAL
+    if len(sys.argv) < 4 or len(sys.argv) > 4:
+        print "uso: <GDAL PostGIS connection string> <mes> <agno>"
         raise SystemExit
     pg_connection_string = sys.argv[1]
     mes = sys.argv[2]
     agno = sys.argv[3]
-	input_file = sys.argv[4]
-    gpcc2gcmon(pg_connection_string, mes, agno, input_file)
+    gpcc2gcm_win(pg_connection_string, mes, agno)
     raise SystemExit
